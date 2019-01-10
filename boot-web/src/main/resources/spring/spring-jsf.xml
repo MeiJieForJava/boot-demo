@@ -1,0 +1,20 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<beans xmlns="http://www.springframework.org/schema/beans"-->
+       <!--xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jsf="http://jsf.jd.com/schema/jsf"-->
+       <!--xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd-->
+    <!--http://jsf.jd.com/schema/jsf http://jsf.jd.com/schema/jsf/jsf.xsd">-->
+
+    <!--<jsf:registry id="jsfRegistry" protocol="jsfRegistry" index="i.jsf.jd.com"/>-->
+
+    <!--<jsf:server id="myjsf" protocol="jsf"/>-->
+    <!--&lt;!&ndash; 单点登录JSF服务接口 &ndash;&gt;-->
+    <!--<jsf:consumer id="ssoService" interface="com.jd.ssa.service.SsoService" protocol="jsf" alias="${jsf.consumer.SsoService}" timeout="10000"/>-->
+    <!--&lt;!&ndash; 广告位&ndash;&gt;-->
+    <!--<jsf:consumer id="mediaService" interface="com.jd.dsp.soa.client.media.MediaService" protocol="jsf" alias="${jsf.consumer.MediaService}" timeout="7000" check="false"  retries="0"/>-->
+
+    <!--&lt;!&ndash;校验是否是京东pin &ndash;&gt;-->
+    <!--<bean id="userSdkConsumerFilter" class="com.jd.user.sdk.export.filter.UserSdkConsumerFilter" scope="prototype"/>-->
+    <!--<jsf:consumer id="userInfoExportService" interface="com.jd.user.sdk.export.UserInfoExportService" alias="${jsf.consumer.UserInfoExportService}" filter="userSdkConsumerFilter" retries="1" timeout="300">-->
+        <!--<jsf:parameter  key="source" value="${UserInfoExportService.source}" hide="true" />-->
+    <!--</jsf:consumer>-->
+<!--</beans>-->
