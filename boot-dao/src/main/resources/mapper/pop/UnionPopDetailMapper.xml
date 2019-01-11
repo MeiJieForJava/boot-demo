@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.boot.dao.pop.UnionPopDetailMapper">
+<select id="detailList" resultType="com.boot.domain.pop.UnionPopDetail">
+		SELECT pk,
+		adowner AS adowner,
+		pop_id AS popId,
+		pop_name AS popName,
+		pin,
+		status,
+		agree_status AS agreeStatus,
+		freeze_state AS freezeState,
+		shop_id AS shopId,
+		ufn_type AS ufnType,
+		adowner_type AS adownerType,
+		latelogin_time AS lateloginTime,
+	    indexlogin_time AS indexloginTime,
+	    is_agree_cpa AS isAgreeCpa,
+	    CASE WHEN ufn_type in (1, 307, 301, 317, 9, 907) THEN pin
+        	WHEN ufn_type = 214 or ufn_type=2 THEN pop_id
+        	WHEN ufn_type = 3 THEN shop_id
+        	ELSE NULL END as accountNo,
+        supplier_code as supplierCode,
+        agree_wx as agreeWx,
+        agree_wx_time as agreeWxTime,
+		quit_status as quitStatus,
+		quit_time as quitTime,
+		agree_tripartite as agreeTripartite,
+		agree_tripartite_time as agreeTripartiteTime,
+		main_category_ids as mainCategoryIds,
+		auto_assign as autoAssign
+		FROM union_pop_detail
+</select>
+
+</mapper>
