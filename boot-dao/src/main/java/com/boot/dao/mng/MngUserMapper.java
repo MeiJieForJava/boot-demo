@@ -1,7 +1,7 @@
 package com.boot.dao.mng;
 
-import com.boot.domain.user.User;
-import org.apache.ibatis.annotations.Mapper;
+import com.boot.domain.mng.MngUser;
+import com.boot.domain.pop.UnionPopDetail;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface MngUserMapper {
 
-    List<User> userList();
+    List<MngUser> userList();
 
 }
 

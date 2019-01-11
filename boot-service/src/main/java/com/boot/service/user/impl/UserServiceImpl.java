@@ -1,7 +1,9 @@
 package com.boot.service.user.impl;
 
 import com.boot.dao.mng.MngUserMapper;
-import com.boot.domain.user.User;
+import com.boot.dao.pop.UnionPopDetailMapper;
+import com.boot.domain.mng.MngUser;
+import com.boot.domain.pop.UnionPopDetail;
 import com.boot.service.user.UserService;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,15 @@ public class UserServiceImpl implements UserService {
     @Resource
     private MngUserMapper mngUserMapper;
 
-    public List<User> userList() {
+    @Resource
+    private UnionPopDetailMapper unionPopDetailMapper;
+
+    public List<MngUser> userList() {
         return mngUserMapper.userList();
+    }
+
+
+    public List<UnionPopDetail> detailList() {
+        return unionPopDetailMapper.detailList();
     }
 }

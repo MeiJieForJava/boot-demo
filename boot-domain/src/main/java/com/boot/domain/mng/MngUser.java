@@ -1,4 +1,4 @@
-package com.boot.domain.user;
+package com.boot.domain.mng;
 
 import lombok.Data;
 import lombok.ToString;
@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @Data
 @ToString
-public class User {
+public class MngUser {
 
     private String name;
 

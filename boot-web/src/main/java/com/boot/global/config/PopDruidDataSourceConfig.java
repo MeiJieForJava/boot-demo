@@ -18,11 +18,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 
 @SpringBootConfiguration
-@ConfigurationProperties(prefix = "spring.datasource.mng")
+@ConfigurationProperties(prefix = "spring.datasource.pop")
 @PropertySource(value = {"classpath:db.properties", "classpath:important.properties"})
-@MapperScan(value = "com.boot.dao.mng", sqlSessionFactoryRef = "mngSqlSessionFactory")
+@MapperScan(value = "com.boot.dao.pop", sqlSessionFactoryRef = "popSqlSessionFactory")
 @Data
-public class MngDruidDataSourceConfig {
+public class PopDruidDataSourceConfig {
     private String name;
     private String url;
     private String username;
@@ -45,9 +45,9 @@ public class MngDruidDataSourceConfig {
     private int maxPoolPreparedStatementPerConnectionSize;
     private String connectionProperties;
 
-    @Bean(name = "mngDataSource", initMethod = "init", destroyMethod = "close")
-//    @Primary
-    public DruidDataSource testDataSource() throws Exception {
+    @Bean(name = "popDataSource",initMethod="init",destroyMethod = "close")
+    @Primary
+    public DruidDataSource testDataSource() throws Exception{
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(driverClassName);
         dataSource.setUrl(url);
@@ -76,18 +76,18 @@ public class MngDruidDataSourceConfig {
         return dataSource;
     }
 
-    @Bean(name = "mngSqlSessionFactory")
-//    @Primary
-    public SqlSessionFactory mngSessionFactory(@Qualifier("mngDataSource") DataSource testDataSource) throws Exception {
+    @Bean(name = "popSqlSessionFactory")
+    @Primary
+    public SqlSessionFactory popSessionFactory(@Qualifier("popDataSource")DataSource testDataSource) throws Exception{
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(testDataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("mapper/mng/*.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("mapper/pop/*.xml"));
         return bean.getObject();
     }
 
-    @Bean(name = "mngTransactionManager")
-//    @Primary
-    public PlatformTransactionManager mngTransactionManager(@Qualifier("mngDataSource") DataSource mngDataSource) {
-        return new DataSourceTransactionManager(mngDataSource);
+    @Bean(name = "popTransactionManager")
+    @Primary
+    public PlatformTransactionManager popTransactionManager(@Qualifier("popDataSource")DataSource popDataSource) {
+        return new DataSourceTransactionManager(popDataSource);
     }
 }

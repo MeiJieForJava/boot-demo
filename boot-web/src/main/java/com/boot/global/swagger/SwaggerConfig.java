@@ -11,11 +11,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 /**
- * @author by tangye1 on 2018/5/18.
- *         Created by tangye1 on 2018/5/18.
- *         swagger注意点
- *         1.只支持80端口
- *         2.只支持.com域名
+ * 1.只支持80端口
+ * 2.只支持.com域名
  */
 @Configuration
 //@EnableSwagger2
@@ -34,13 +31,13 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 //页面标题
-                .title("流量自动化接入管理端API")
+                .title("demo")
                 //创建人
-                .contact(new Contact("huquanbo", "http://www.jd.com", ""))
+                .contact(new Contact("meijie", "http://www.123.com", ""))
                 //版本号
                 .version("1.0")
                 //描述
-                .description("流量自动化接入管理端API描述")
+                .description("demo")
                 .build();
     }
 }
