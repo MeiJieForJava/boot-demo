@@ -42,6 +42,7 @@
         <mysql.version>5.1.25</mysql.version>
         <swagger.version>2.7.0</swagger.version>
         <commons-lang3.version>3.6</commons-lang3.version>
+        <sharding-sphere.version>3.0.0.M2</sharding-sphere.version>
         <skipTests>true</skipTests>
     </properties>
 
@@ -170,6 +171,16 @@
         </dependency>
         <!--tomcat加固end -->
 
+        <dependency>
+            <groupId>io.shardingsphere</groupId>
+            <artifactId>sharding-jdbc</artifactId>
+            <version>${sharding-sphere.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.shardingsphere</groupId>
+            <artifactId>sharding-core</artifactId>
+            <version>${sharding-sphere.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>

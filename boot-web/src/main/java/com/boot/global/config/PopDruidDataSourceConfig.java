@@ -1,6 +1,10 @@
 package com.boot.global.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import io.shardingsphere.core.api.ShardingDataSourceFactory;
+import io.shardingsphere.core.api.config.ShardingRuleConfiguration;
+import io.shardingsphere.core.api.config.TableRuleConfiguration;
+import io.shardingsphere.core.api.config.strategy.StandardShardingStrategyConfiguration;
 import lombok.Data;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -16,6 +20,10 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 @SpringBootConfiguration
 @ConfigurationProperties(prefix = "spring.datasource.pop")
@@ -45,12 +53,16 @@ public class PopDruidDataSourceConfig {
     private int maxPoolPreparedStatementPerConnectionSize;
     private String connectionProperties;
 
-    @Bean(name = "popDataSource",initMethod="init",destroyMethod = "close")
+    @Bean(name = "popDataSource")
     @Primary
-    public DruidDataSource testDataSource() throws Exception{
+    public DataSource getDataSource() throws Exception {
+        return buildDataSource();
+    }
+
+    public DataSource createDataSource(String dataSourceName) throws Exception {
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(driverClassName);
-        dataSource.setUrl(url);
+        dataSource.setUrl(String.format(url, dataSourceName));
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         dataSource.setMaxActive(maxActive);
@@ -76,9 +88,40 @@ public class PopDruidDataSourceConfig {
         return dataSource;
     }
 
+    private DataSource buildDataSource() throws Exception {
+        ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
+        shardingRuleConfig.getTableRuleConfigs().add(getOrderTableRuleConfiguration());
+        shardingRuleConfig.getTableRuleConfigs().add(getOrderItemTableRuleConfiguration());
+        shardingRuleConfig.getBindingTableGroups().add("t_order, t_order_item");
+        shardingRuleConfig.setDefaultDatabaseShardingStrategyConfig(new StandardShardingStrategyConfiguration("user_id", new DatabaseShardingAlgorithm()));
+        shardingRuleConfig.setDefaultTableShardingStrategyConfig(new StandardShardingStrategyConfiguration("order_id", new TablePreciseShardingAlgorithm(), new TableRangeShardingAlgorithm()));
+        Map<String, DataSource> dataSourceMap = new HashMap<>();
+        dataSourceMap.put("ds_0", createDataSource("ds_0"));
+        dataSourceMap.put("ds_1", createDataSource("ds_1"));
+        Properties properties = new Properties();
+//        properties.setProperty("sql.show", Boolean.TRUE.toString());
+        return ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfig, new HashMap<>(), properties);
+
+    }
+
+    private static TableRuleConfiguration getOrderTableRuleConfiguration() {
+        TableRuleConfiguration result = new TableRuleConfiguration();
+        result.setLogicTable("t_order");
+        result.setActualDataNodes("ds_${0..1}.t_order_${[0, 1]}");
+        result.setKeyGeneratorColumnName("order_id");
+        return result;
+    }
+
+    private static TableRuleConfiguration getOrderItemTableRuleConfiguration() {
+        TableRuleConfiguration result = new TableRuleConfiguration();
+        result.setLogicTable("t_order_item");
+        result.setActualDataNodes("ds_${0..1}.t_order_item_${[0, 1]}");
+        return result;
+    }
+
     @Bean(name = "popSqlSessionFactory")
     @Primary
-    public SqlSessionFactory popSessionFactory(@Qualifier("popDataSource")DataSource testDataSource) throws Exception{
+    public SqlSessionFactory popSessionFactory(@Qualifier("popDataSource") DataSource testDataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(testDataSource);
         bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("mapper/pop/*.xml"));
@@ -87,7 +130,7 @@ public class PopDruidDataSourceConfig {
 
     @Bean(name = "popTransactionManager")
     @Primary
-    public PlatformTransactionManager popTransactionManager(@Qualifier("popDataSource")DataSource popDataSource) {
+    public PlatformTransactionManager popTransactionManager(@Qualifier("popDataSource") DataSource popDataSource) {
         return new DataSourceTransactionManager(popDataSource);
     }
 }
