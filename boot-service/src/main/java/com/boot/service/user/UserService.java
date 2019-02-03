@@ -1,5 +1,6 @@
 package com.boot.service.user;
 
+import com.boot.domain.ds.Order;
 import com.boot.domain.mng.MngUser;
 import com.boot.domain.pop.UnionPopDetail;
 
@@ -17,4 +18,5 @@ public interface UserService {
 
     List<UnionPopDetail> detailList();
 
+    public List<Order> orderList();
 }

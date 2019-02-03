@@ -1,6 +1,7 @@
 package com.boot.controller.user;
 
 import com.boot.common.entity.JsonDataResponse;
+import com.boot.domain.ds.Order;
 import com.boot.domain.mng.MngUser;
 import com.boot.domain.pop.UnionPopDetail;
 import com.boot.service.user.UserService;
@@ -47,6 +48,16 @@ public class UserController {
         logger.info("size:{}", users.size());
         JsonDataResponse<List<UnionPopDetail>> response = JsonDataResponse.success();
         response.setData(users);
+        return response;
+    }
+
+    @PostMapping(value = "/orderList")
+    public JsonDataResponse<List<Order>> orderList() {
+        List<Order> orders = userService.orderList();
+//        List<UnionPopDetail> users = new ArrayList<>();
+        logger.info("size:{}", orders.size());
+        JsonDataResponse<List<Order>> response = JsonDataResponse.success();
+        response.setData(orders);
         return response;
     }
 
